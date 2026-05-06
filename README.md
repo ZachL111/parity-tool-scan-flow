@@ -1,69 +1,40 @@
 # parity-tool-scan-flow
 
-`parity-tool-scan-flow` treats cli tools as a local verification problem. The Python implementation is intentionally narrow, but the fixtures and notes make the behavior explicit.
+`parity-tool-scan-flow` explores cli tools with a small Python codebase and local fixtures. The technical goal is to package a Python local lab for scan analysis with node-edge fixtures, cycle and reachability reports, and documented operating limits.
 
-## Parity Tool Scan Flow Checkpoints
+## Use Case
 
-Treat the compact fixture as the contract and the extended examples as a scratchpad. The code should stay boring enough that a change in behavior is obvious from the test output.
+I want this repository to be useful as a quick reading exercise: fixtures first, implementation second, verifier last.
 
-## What This Is For
+## Parity Tool Scan Flow Review Notes
 
-The goal is to capture the core behavior in code and make the surrounding assumptions obvious. A reader should be able to run the verifier, open the fixtures, and understand why each decision was made.
+The first comparison I would make is `argument risk` against `file span` because it shows where the rule is most opinionated.
 
-## Architecture Notes
+## Highlights
 
-The design is intentionally direct: parse or construct a signal, score it, classify it, and verify the expected branch. This makes the repository useful for studying cli tools behavior without needing a service or database unless the language project itself is SQL. The Python code favors standard library tools and direct tests over framework weight.
+- `fixtures/domain_review.csv` adds cases for file span and terminal width.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/parity-tool-scan-walkthrough.md` walks through the case spread.
+- The Python code includes a review path for `argument risk` and `file span`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Case Study
+## Code Layout
 
-The examples are meant to be readable before they are exhaustive. They cover enough variation to show how latency and risk can pull a decision below the threshold.
+The implementation keeps the scoring rule plain: reward signal and confidence, preserve slack, penalize drag, then classify the result into a review lane.
 
-## Useful Pieces
+The Python implementation avoids hidden state so fixture changes are easy to reason about.
 
-- Uses fixture data to keep argument shape changes visible in code review.
-- Includes extended examples for file input, including `surge` and `degraded`.
-- Documents repeatable reports tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
-
-## Tooling
-
-Clone the repository, enter the directory, and run the verifier. No database server, cloud account, or token is required.
-
-## Quality Gate
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
-
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Project Layout
-
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
-- `pyproject.toml`: Python project metadata
-
-## Scope
-
-This code is local-first. It makes no claim about deployed usage and avoids credentials, hosted state, and environment-specific setup.
-
-## Expansion Ideas
-
-- Add a short report command that prints the score breakdown for a single scenario.
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add one more cli tools fixture that focuses on a malformed or borderline input.
-
-## Local Workflow
+## Run The Check
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Regression Path
+
+The check exercises the source code and the review fixture. `edge` is the high score at 204; `baseline` is the low score at 116.
+
+## Future Work
+
+The repository is intentionally scoped to local checks. I would expand it by adding adversarial fixtures before adding features.

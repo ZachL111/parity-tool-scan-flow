@@ -1,0 +1,73 @@
+{
+  "repo": "parity-tool-scan-flow",
+  "language": "Python",
+  "category": "CLI tools",
+  "goal": "Package a Python local lab for scan analysis with node-edge fixtures, cycle and reachability reports, and documented operating limits.",
+  "review_model": {
+    "terms": [
+      "file span",
+      "terminal width",
+      "argument risk",
+      "report density"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "file span",
+      "signal": 59,
+      "slack": 33,
+      "drag": 29,
+      "confidence": 52,
+      "score": 116,
+      "lane": "watch"
+    },
+    {
+      "name": "stress",
+      "focus": "terminal width",
+      "signal": 65,
+      "slack": 53,
+      "drag": 22,
+      "confidence": 46,
+      "score": 163,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "argument risk",
+      "signal": 74,
+      "slack": 35,
+      "drag": 8,
+      "confidence": 45,
+      "score": 204,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "report density",
+      "signal": 57,
+      "slack": 23,
+      "drag": 11,
+      "confidence": 70,
+      "score": 174,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "file span",
+      "signal": 68,
+      "slack": 24,
+      "drag": 25,
+      "confidence": 51,
+      "score": 136,
+      "lane": "watch"
+    }
+  ]
+}
